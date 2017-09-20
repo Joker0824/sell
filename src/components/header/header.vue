@@ -44,6 +44,7 @@
         <div class="mask" v-show="isShowMask">
             <div class="mask-wrapper">
                 <div class="mask-main">
+                    <star :size="48" :score="4.1"></star>
                     <div>{{sellers.bulletin}}</div>
                     <div>{{sellers.bulletin}}</div>
                     <div>{{sellers.bulletin}}</div>
@@ -65,6 +66,7 @@
     </div>
 </template>
 <script>
+import Star from 'components/star/star.vue';
 export default {
     props: ['sellers'],
     data() {
@@ -80,6 +82,9 @@ export default {
         closeMask() {
             this.isShowMask = false;
         }
+    },
+    components: {
+        Star
     }
 };
 </script>
@@ -209,6 +214,7 @@ export default {
       .mask-main
         padding-bottom 64px
         margin-top 64px
+        text-align center  
     .mask-close
       position relative
       height 32px

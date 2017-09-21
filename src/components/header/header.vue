@@ -44,18 +44,22 @@
         <div class="mask" v-show="isShowMask">
             <div class="mask-wrapper">
                 <div class="mask-main">
-                    <star :size="48" :score="4.1"></star>
-                    <div>{{sellers.bulletin}}</div>
-                    <div>{{sellers.bulletin}}</div>
-                    <div>{{sellers.bulletin}}</div>
-                    <div>{{sellers.bulletin}}</div>
-                    <div>{{sellers.bulletin}}</div>
-                    <div>{{sellers.bulletin}}</div>
-                    <div>{{sellers.bulletin}}</div>
-                    <div>{{sellers.bulletin}}</div>
-                    <div>{{sellers.bulletin}}</div>
-                    <div>{{sellers.bulletin}}</div>
-                    <div>{{sellers.bulletin}}</div>
+                    <h3 class="seller-name">{{sellers.name}}</h3>
+                    <div class="star">
+                        <star :size="48" :score="4.1"></star>
+                    </div>
+                    <div class="discount-detail">
+                        <!-- 优惠信息 -->
+                        <div class="title">
+                            <div class="line"></div>
+                            <div class="text">优惠信息</div>
+                            <div class="line"></div>
+                        </div>
+                        <!-- 优惠信息 -->
+                        <!-- 商家公告 -->
+                        <div class="seller-bulletin"></div>
+                        <!-- 商家公告 -->
+                    </div>
                 </div>
             </div>
             <div class="mask-close">
@@ -214,8 +218,30 @@ export default {
       .mask-main
         padding-bottom 64px
         margin-top 64px
-        text-align center  
-    .mask-close
+        text-align center
+        .seller-name
+          font-size 16px
+          line-height 16px
+          font-weight 350
+          color rgb(255,255,255)
+        .star
+          padding 16px 0 28px 0
+          height 24px   
+          line-height 24px
+        .discount-detail
+          width 80%
+          margin 0 auto
+          .title
+            display flex
+            .line
+              position relative
+              top -6px
+              flex 1
+              border-bottom 1px solid rgba(255,255,255,0.2)  
+            .text
+              font-size 18px
+              padding 0 12px
+   .mask-close
       position relative
       height 32px
       margin-top -32px

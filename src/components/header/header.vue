@@ -41,31 +41,48 @@
         </div>
         <!-- header背景 -->
         <!-- 弹出层 -->
-        <div class="mask" v-show="isShowMask">
-            <div class="mask-wrapper">
-                <div class="mask-main">
-                    <h3 class="seller-name">{{sellers.name}}</h3>
-                    <div class="star">
-                        <star :size="48" :score="4.1"></star>
-                    </div>
-                    <div class="discount-detail">
-                        <!-- 优惠信息 -->
-                        <div class="title">
-                            <div class="line"></div>
-                            <div class="text">优惠信息</div>
-                            <div class="line"></div>
+        <transition name="fade">
+            <div class="mask" v-show="isShowMask">
+                <div class="mask-wrapper">
+                    <div class="mask-main">
+                        <h3 class="seller-name">{{sellers.name}}</h3>
+                        <div class="star">
+                            <star :size="48" :score="4.1"></star>
                         </div>
-                        <!-- 优惠信息 -->
-                        <!-- 商家公告 -->
-                        <div class="seller-bulletin"></div>
-                        <!-- 商家公告 -->
+                        <div class="discount-detail">
+                            <!-- 优惠信息 -->
+                            <div class="title">
+                                <div class="line"></div>
+                                <div class="text">优惠信息</div>
+                                <div class="line"></div>
+                            </div>
+                            <ul v-if="sellers.supports" class="supports">
+                                <li class="support-item" v-for="(item,index) in sellers.supports" :key="item">
+                                    <i class="icon" :class="classMap[sellers.supports[index].type]"></i>
+                                    <span class="text">{{ sellers.supports[index].description}}
+                                    </span>
+                                </li>
+                            </ul>
+                            <!-- 优惠信息 -->
+                            <!-- 商家公告 -->
+                            <div class="title">
+                                <div class="line"></div>
+                                <div class="text">商家公告</div>
+                                <div class="line"></div>
+                            </div>
+                            <div class="seller-bulletin">
+                                {{sellers.bulletin}}
+                            </div>
+                            <!-- 商家公告 -->
+                        </div>
                     </div>
                 </div>
+                <div class="mask-close">
+                    <i class="icon-close" @click="closeMask"></i>
+                </div>
             </div>
-            <div class="mask-close">
-                <i class="icon-close" @click="closeMask"></i>
-            </div>
-        </div>
+        </transition>
+
         <!-- 弹出层 -->
     </div>
 </template>
@@ -239,8 +256,42 @@ export default {
               flex 1
               border-bottom 1px solid rgba(255,255,255,0.2)  
             .text
-              font-size 18px
+              font-size 14px
               padding 0 12px
+              font-weight 700
+          .supports
+            padding 24px 12px 28px 12px
+            .support-item
+              text-align left
+              padding-top 12px
+              font-size 0
+              .icon
+                display inline-block
+                width 16px
+                height 16px
+                vertical-align top
+                padding-right 6px
+                background-size 16px 16px
+                background-repeat no-repeat
+                &.decrease
+                  bg-img('./imgs/decrease_2')
+                &.discount
+                  bg-img('./imgs/discount_2')
+                &.guarantee
+                  bg-img('./imgs/guarantee_2')
+                &.invoice
+                  bg-img('./imgs/invoice_2')
+                &.special
+                  bg-img('./imgs/special_2')
+              .text
+                line-height 16px
+                font-size 12px
+                font-weight 200
+          .seller-bulletin
+            padding 24px 12px 0 12px
+            line-height 24px 
+            font-size 12px
+            font-weight 200px      
    .mask-close
       position relative
       height 32px

@@ -11,7 +11,7 @@ export default new Router({
   routes: [{
     path: '/',
     name: 'home',
-    component: Sellers
+    component: Goods
   }, {
     path: '/goods',
     name: 'goods',

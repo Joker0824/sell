@@ -57,7 +57,7 @@
                                 <div class="line"></div>
                             </div>
                             <ul v-if="sellers.supports" class="supports">
-                                <li class="support-item" v-for="(item,index) in sellers.supports" :key="item">
+                                <li class="support-item" v-for="(item,index) in sellers.supports" :key="index">
                                     <i class="icon" :class="classMap[sellers.supports[index].type]"></i>
                                     <span class="text">{{ sellers.supports[index].description}}
                                     </span>
@@ -82,7 +82,6 @@
                 </div>
             </div>
         </transition>
-
         <!-- 弹出层 -->
     </div>
 </template>

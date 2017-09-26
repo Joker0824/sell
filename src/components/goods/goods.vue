@@ -8,7 +8,33 @@
                 </li>
             </ul>
         </div>
-        <div class="foods-list"></div>
+        <div class="goods-wrapper">
+            <ul>
+                <li class="goods-item" v-for="good in goods" :key="good.name">
+                    <h1 class="good-name">{{good.name}}</h1>
+                    <ul>
+                        <li class="food-item" v-for="food in good.foods" :key="food.name">
+                            <div class="icon-wrapper">
+                                <img width="57" height="57" :src="food.icon" class="icon" alt="食物的icon">
+                            </div>
+                            <div class="content">
+                                <h3 class="food-name">{{food.name}}</h3>
+                                <p class="description">{{food.description}}</p>
+                                <div class="other">
+                                    <span class="sellCount">月售{{food.sellCount}}份</span>
+                                    <span class="rating">好评率{{food.rating}}%</span>
+                                </div>
+                                <div class="price">
+                                    <span class="price">￥{{food.price}}</span>
+                                    <span class="oldPrice" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
+
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 <script>
@@ -78,4 +104,40 @@ export default {
        font-size 12px
        display table-cell
        vertical-align middle
+  .goods-wrapper
+    .goods-item
+      padding-right 18px     
+      .good-name
+        height 26px
+        font-size 12px
+        color rgb(147,153,159)
+        line-height 26px
+        background-color #f3f5f7
+        border-left 4px solid #d9dde1
+        padding-left 14px
+      .food-item
+        padding 18px  
+      .icon-wrapper
+        display inline-block
+        vertical-align top
+      .content
+        display inline-block
+        font-size 10px
+        line-height 10px
+        color rgb(147,153,159)
+        padding-top 2px 
+        .food-name
+          font-size 14px
+          line-height 14px
+          color rgb(7,17,27)
+          padding 2px 0 8px 0
+        .description
+          padding-bottom 8px
+        .other
+          font-size 0
+          .sellCount
+            font-size 10px
+            padding-right 12px
+          .rating
+            font-size 10px   
 </style>

@@ -2,7 +2,7 @@
     <div class="goods">
         <div class="menu-wrapper" ref="menuScroll">
             <ul v-if="goods">
-                <li class="menu-item border-1px" v-for="(item,index) in goods" :key="item.type">
+                <li @click="selectMenu(index,$event)" class="menu-item border-1px" :class="{currentMenu:menuCurrentIndex==index}" v-for="(item,index) in goods" :key="item.type">
                     <span class="text">
                         <i class="icon" :class="classMap[item.type]" v-if="item.type>0"></i>{{item.name}}</span>
                 </li>
@@ -46,46 +46,55 @@ export default {
             goods: [],
             classMap: ['decrease', 'discount', 'guarantee', 'invoice', 'special'],
             // food对应的每种套餐的高度
-            goodHeighList: [],
+            goodsHeightList: [],
             //  food的滚动高度
             scrollY: 0
-
         };
     },
     computed: {
         // 根据foods的scrollY算出左边是哪种类型的套餐
         menuCurrentIndex() {
-            let height = 0;
-            for (var i = 0; i < this.goodHeighList.length; i++) {
-                let item = this.goodHeighList[i];
-                height += item;
+            // console.log(this.scrollY);
+            for (let i = 0; i < this.goodsHeightList.length - 1; i++) {
+                let height1 = this.goodsHeightList[i];
+                let height2 = this.goodsHeightList[i + 1];
+                if (this.scrollY > height1 && this.scrollY < height2) {
+                    return i;
+                }
             }
+            return 0;
         }
     },
     methods: {
+        //  初始化better-scroll
         _initBScroll() {
             // 实例化menuscroll和goodscroll
-            this.menuScroll = new BScroll(this.$refs.menuScroll, {});
+            this.menuScroll = new BScroll(this.$refs.menuScroll, {
+                click: true
+            });
             this.goodsScroll = new BScroll(this.$refs.goodsScroll, {
                 probeType: 3
             });
             this.goodsScroll.on('scroll', (pos) => {
-                let scrollY = Math.abs(pos.y);
-                console.log(scrollY);
+                this.scrollY = Math.abs(pos.y);
             });
         },
+        // 计算套餐所在高度
         _calculHeight() {
             let goodsItems = this.$refs.goodsItemHook;
-            this.goodHeighList = [];
             let height = 0;
+            this.goodsHeightList.push(height);
             goodsItems.forEach(function(element) {
                 height += element.offsetHeight;
-                goodHeighList.push(element.offsetHeight);
+                this.goodsHeightList.push(height);
             }, this);
-            console.log(height);
-            console.log(goodHeighList);
-            // console.log(goodsItems);
-            // return goodsItems;
+        },
+        // 点击左边的分类右边跳转到不同位置
+        selectMenu(index, event) {
+            let goodsItems = this.$refs.goodsItemHook;
+            let el = goodsItems[index];
+            // better-scroll的api,跳转到对应的套餐、
+            this.goodsScroll.scrollToElement(el, 300);
         }
     },
     created() {
@@ -125,6 +134,11 @@ export default {
     .menu-item
       display table
       border-1px(rgba(7,17,27,0.1))
+      &.currentMenu
+        font-size 12px
+        color rgb(240,20,20)
+        line-height 14px
+        background-color #fff
       height 54px
       padding 0 12px
      .icon

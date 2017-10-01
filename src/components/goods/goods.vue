@@ -34,11 +34,15 @@
                 </li>
             </ul>
         </div>
+        <!-- 购物车组件 -->
+        <shopcart :selectFood="selectFoods"></shopcart>
+        <!-- 购物车组件 -->
     </div>
 </template>
 <script>
 /* 引入better-scroll插件 */
 import BScroll from 'better-scroll';
+import Shopcart from 'components/shopcart/shopcart';
 const ERR_OK = 0;
 export default {
     data() {
@@ -114,6 +118,10 @@ export default {
             .catch((error) => {
                 console.log(error);
             });
+    },
+    components: {
+        /* 引入shopcart组件 */
+        Shopcart
     }
 };
 </script>
@@ -133,6 +141,8 @@ export default {
     background-color rgba(7,17,27,0.1)
     .menu-item
       display table
+      box-sizing border-box
+      width 100%
       border-1px(rgba(7,17,27,0.1))
       &.currentMenu
         font-size 12px

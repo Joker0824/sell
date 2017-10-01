@@ -29,6 +29,7 @@
                                     <span class="oldPrice" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                                 </div>
                             </div>
+                            <cart-control :food="food"></cart-control>
                         </li>
                     </ul>
                 </li>
@@ -43,6 +44,7 @@
 /* 引入better-scroll插件 */
 import BScroll from 'better-scroll';
 import Shopcart from 'components/shopcart/shopcart';
+import CartControl from 'components/cartcontrol/cartcontrol';
 const ERR_OK = 0;
 export default {
     data() {
@@ -77,7 +79,8 @@ export default {
                 click: true
             });
             this.goodsScroll = new BScroll(this.$refs.goodsScroll, {
-                probeType: 3
+                probeType: 3,
+                click: true
             });
             this.goodsScroll.on('scroll', (pos) => {
                 this.scrollY = Math.abs(pos.y);
@@ -121,7 +124,8 @@ export default {
     },
     components: {
         /* 引入shopcart组件 */
-        Shopcart
+        Shopcart,
+        CartControl
     }
 };
 </script>
@@ -186,7 +190,7 @@ export default {
         border-left 2px solid #d9dde1
         padding-left 14px
       .food-item
-        margin 18px
+        padding 18px
         border-1px(rgba(7,17,27,0.1))
       .icon-wrapper
         display inline-block

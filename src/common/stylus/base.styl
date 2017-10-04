@@ -12,11 +12,18 @@
   zoom 1
   &::before,&::after
     display table
-    content ''   
+    content ''
   &::after
     clear both
-//  mask的过渡动画   
-.fade-enter-active,.fade-leave-active 
+//  mask的过渡动画
+.fade-enter-active,.fade-leave-active
     transition: opacity .5s
 .fade-enter, .fade-leave-to
-    opacity: 0      
+    opacity: 0
+// cartcontrol组件的增加，减少的动画
+.move-enter-active,.move-leave-active
+    transition all 0.5s
+    transform: translateX(0) rotate(0)
+.move-enter,.move-leave-to
+    transform: translateX(50px) rotate(180deg)
+    opacity: 0

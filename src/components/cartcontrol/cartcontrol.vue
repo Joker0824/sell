@@ -6,7 +6,9 @@
 					<i class="icon-remove_circle_outline"></i>
 				</div>
 			</transition>
-			<div class="foodCount" v-if="food.count>0">{{food.count}}</div>
+			<transition name="move">
+				<div class="foodCount" v-if="food.count>0">{{food.count}}</div>
+			</transition>
 			<div class="addFood" @click="addFood">
 				<i class="icon-add_circle "></i>
 			</div>
@@ -21,9 +23,16 @@ export default {
 			default() {
 				return {};
 			}
+		},
+		selectFoods: {
+			type: Array,
+			default() {
+				return [];
+			}
 		}
 	},
 	methods: {
+		// 给当前food添加的count属性，直接改变了good里面的值
 		addFood() {
 			if (!this.food.count) {
 				// 动态添加的属性
@@ -32,8 +41,6 @@ export default {
 				// console.log(this.food);
 				this.food.count++;
 			}
-			// console.log(this.food.count);
-			// console.log('addFoodCompeleted');
 		},
 		decreaseFood() {
 			this.food.count--;
@@ -44,9 +51,9 @@ export default {
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
 	.cartcontrol-wrapper
-		position absolute
-		right 18px
-		bottom 18px
+		// position absolute
+		// right 18px
+		// bottom 18px
 		height 24px
 		font-size 0
 		color rgb(0,160,222)

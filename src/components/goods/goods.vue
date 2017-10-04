@@ -1,44 +1,48 @@
 <template>
-    <div class="goods">
-        <div class="menu-wrapper" ref="menuScroll">
-            <ul v-if="goods">
-                <li @click="selectMenu(index,$event)" class="menu-item border-1px" :class="{currentMenu:menuCurrentIndex==index}" v-for="(item,index) in goods" :key="item.type">
-                    <span class="text">
-                        <i class="icon" :class="classMap[item.type]" v-if="item.type>0"></i>{{item.name}}</span>
-                </li>
-            </ul>
-        </div>
-        <div class="goods-wrapper" ref="goodsScroll">
-            <ul>
-                <li class="goods-item" v-for="good in goods" :key="good.name" ref="goodsItemHook">
-                    <h1 class="good-name">{{good.name}}</h1>
-                    <ul>
-                        <li class="food-item" v-for="food in good.foods" :key="food.name">
-                            <div class="icon-wrapper">
-                                <img width="57" height="57" :src="food.icon" class="icon" alt="食物的icon">
-                            </div>
-                            <div class="content">
-                                <h3 class="food-name">{{food.name}}</h3>
-                                <p class="description" v-if="food.description">{{food.description}}</p>
-                                <div class="other">
-                                    <span class="sellCount">月售{{food.sellCount}}份</span>
-                                    <span class="rating">好评率{{food.rating}}%</span>
-                                </div>
-                                <div class="price">
-                                    <span class="price">￥{{food.price}}</span>
-                                    <span class="oldPrice" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
-                                </div>
-                            </div>
-                            <cart-control :food="food"></cart-control>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <!-- 购物车组件 -->
-        <shopcart :selectFood="selectFoods"></shopcart>
-        <!-- 购物车组件 -->
-    </div>
+	<div class="goods">
+		<!-- 左侧菜单列表 -->
+		<div class="menu-wrapper" ref="menuScroll">
+			<ul v-if="goods">
+				<li @click="selectMenu(index,$event)" class="menu-item border-1px" :class="{currentMenu:menuCurrentIndex==index}" v-for="(item,index) in goods" :key="item.type">
+					<span class="text">
+						<i class="icon" :class="classMap[item.type]" v-if="item.type>0"></i>{{item.name}}</span>
+				</li>
+			</ul>
+		</div>
+		<!-- 左侧菜单列表 -->
+		<!-- 右侧食物列表 -->
+		<div class="goods-wrapper" ref="goodsScroll">
+			<ul>
+				<li class="goods-item" v-for="good in goods" :key="good.name" ref="goodsItemHook">
+					<h1 class="good-name">{{good.name}}</h1>
+					<ul>
+						<li class="food-item" v-for="food in good.foods" :key="food.name">
+							<div class="icon-wrapper">
+								<img width="57" height="57" :src="food.icon" class="icon" alt="食物的icon">
+							</div>
+							<div class="content">
+								<h3 class="food-name">{{food.name}}</h3>
+								<p class="description" v-if="food.description">{{food.description}}</p>
+								<div class="other">
+									<span class="sellCount">月售{{food.sellCount}}份</span>
+									<span class="rating">好评率{{food.rating}}%</span>
+								</div>
+								<div class="price">
+									<span class="price">￥{{food.price}}</span>
+									<span class="oldPrice" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
+								</div>
+							</div>
+							<cart-control :food="food"></cart-control>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<!-- 右侧食物列表 -->
+		<!-- 购物车组件 -->
+		<shopcart :selectFoods="selectFoods"></shopcart>
+		<!-- 购物车组件 -->
+	</div>
 </template>
 <script>
 /* 引入better-scroll插件 */
@@ -47,86 +51,101 @@ import Shopcart from 'components/shopcart/shopcart';
 import CartControl from 'components/cartcontrol/cartcontrol';
 const ERR_OK = 0;
 export default {
-    data() {
-        return {
-            goods: [],
-            classMap: ['decrease', 'discount', 'guarantee', 'invoice', 'special'],
-            // food对应的每种套餐的高度
-            goodsHeightList: [],
-            //  food的滚动高度
-            scrollY: 0
-        };
-    },
-    computed: {
-        // 根据foods的scrollY算出左边是哪种类型的套餐
-        menuCurrentIndex() {
-            // console.log(this.scrollY);
-            for (let i = 0; i < this.goodsHeightList.length - 1; i++) {
-                let height1 = this.goodsHeightList[i];
-                let height2 = this.goodsHeightList[i + 1];
-                if (this.scrollY > height1 && this.scrollY < height2) {
-                    return i;
-                }
-            }
-            return 0;
-        }
-    },
-    methods: {
-        //  初始化better-scroll
-        _initBScroll() {
-            // 实例化menuscroll和goodscroll
-            this.menuScroll = new BScroll(this.$refs.menuScroll, {
-                click: true
-            });
-            this.goodsScroll = new BScroll(this.$refs.goodsScroll, {
-                probeType: 3,
-                click: true
-            });
-            this.goodsScroll.on('scroll', (pos) => {
-                this.scrollY = Math.abs(pos.y);
-            });
-        },
-        // 计算套餐所在高度
-        _calculHeight() {
-            let goodsItems = this.$refs.goodsItemHook;
-            let height = 0;
-            this.goodsHeightList.push(height);
-            goodsItems.forEach(function(element) {
-                height += element.offsetHeight;
-                this.goodsHeightList.push(height);
-            }, this);
-        },
-        // 点击左边的分类右边跳转到不同位置
-        selectMenu(index, event) {
-            let goodsItems = this.$refs.goodsItemHook;
-            let el = goodsItems[index];
-            // better-scroll的api,跳转到对应的套餐、
-            this.goodsScroll.scrollToElement(el, 300);
-        }
-    },
-    created() {
-        this.axios.get('api/goods')
-            .then((res) => {
-                console.log(res.data);
-                if (res.data.errno === ERR_OK) {
-                    this.goods = res.data.data;
-                    // dom更新后进行的操作
-                    this.$nextTick(() => {
-                        this._initBScroll();
-                        this._calculHeight();
-                    });
-                    // console.log(this.goods);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    },
-    components: {
-        /* 引入shopcart组件 */
-        Shopcart,
-        CartControl
-    }
+	data() {
+		return {
+			goods: [],
+			classMap: ['decrease', 'discount', 'guarantee', 'invoice', 'special'],
+			// food对应的每种套餐的高度
+			goodsHeightList: [],
+			//  food的滚动高度
+			scrollY: 0
+		};
+	},
+	computed: {
+		// 根据foods的scrollY算出左边是哪种类型的套餐
+		menuCurrentIndex() {
+			// console.log(this.scrollY);
+			for (let i = 0; i < this.goodsHeightList.length - 1; i++) {
+				let height1 = this.goodsHeightList[i];
+				let height2 = this.goodsHeightList[i + 1];
+				if (this.scrollY > height1 && this.scrollY < height2) {
+					return i;
+				}
+			}
+			return 0;
+		},
+		// 检测good的变化，如果某个food的count数量大于0，就把该food添加到selectFoods
+		selectFoods() {
+			// console.log(this.goods);
+			let selectFoods = [];
+			this.goods.forEach(function(good) {
+				// console.log(good);
+				good.foods.forEach(function(food) {
+					// console.log(food);
+					if (food.count > 0) {
+						selectFoods.push(food);
+					}
+				}, this);
+			}, this);
+			return selectFoods;
+		}
+	},
+	methods: {
+		//  初始化better-scroll
+		_initBScroll() {
+			// 实例化menuscroll和goodscroll
+			this.menuScroll = new BScroll(this.$refs.menuScroll, {
+				click: true
+			});
+			this.goodsScroll = new BScroll(this.$refs.goodsScroll, {
+				probeType: 3,
+				click: true
+			});
+			this.goodsScroll.on('scroll', (pos) => {
+				this.scrollY = Math.abs(pos.y);
+			});
+		},
+		// 计算套餐所在高度
+		_calculHeight() {
+			let goodsItems = this.$refs.goodsItemHook;
+			let height = 0;
+			this.goodsHeightList.push(height);
+			goodsItems.forEach(function(element) {
+				height += element.offsetHeight;
+				this.goodsHeightList.push(height);
+			}, this);
+		},
+		// 点击左边的分类右边跳转到不同位置
+		selectMenu(index, event) {
+			let goodsItems = this.$refs.goodsItemHook;
+			let el = goodsItems[index];
+			// better-scroll的api,跳转到对应的套餐、
+			this.goodsScroll.scrollToElement(el, 300);
+		}
+	},
+	created() {
+		this.axios.get('api/goods')
+			.then((res) => {
+				console.log(res.data);
+				if (res.data.errno === ERR_OK) {
+					this.goods = res.data.data;
+					// dom更新后进行的操作
+					this.$nextTick(() => {
+						this._initBScroll();
+						this._calculHeight();
+					});
+					// console.log(this.goods);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	},
+	components: {
+		/* 引入shopcart组件 */
+		Shopcart,
+		CartControl
+	}
 };
 </script>
 <style lang="stylus" rel="stylesheet/style">
@@ -192,38 +211,42 @@ export default {
       .food-item
         padding 18px
         border-1px(rgba(7,17,27,0.1))
-      .icon-wrapper
-        display inline-block
-        vertical-align top
-      .content
-        display inline-block
-        font-size 10px
-        line-height 10px
-        color rgb(147,153,159)
-        padding-top 2px
-        .food-name
+      	.icon-wrapper
+      	  display inline-block
+      	  vertical-align top
+      	.content
+      	  display inline-block
+      	  font-size 10px
+      	  line-height 10px
+      	  color rgb(147,153,159)
+      	  padding-top 2px
+      	  .food-name
           font-size 14px
           line-height 14px
           color rgb(7,17,27)
           padding 2px 0 8px 0
-        .description
+      	  .description
           line-height 18px
           padding-bottom 8px
-        .other
+      	  .other
           font-size 0
           .sellCount
             font-size 10px
             padding-right 12px
           .rating
             font-size 10px
-        .price
-          line-height 24px
-          font-weight 700
-          .price
-            font-size 14px
-            color rgb(255,0,0)
-            margin-right 8px
-          .oldPrice
-            font-size 10px
-            text-decoration line-through
+      	  .price
+      	    line-height 24px
+      	    font-weight 700
+      	    .price
+      	      font-size 14px
+      	      color rgb(255,0,0)
+      	      margin-right 8px
+      	    .oldPrice
+      	      font-size 10px
+      	      text-decoration line-through
+					.cartcontrol-wrapper
+						position absolute
+						right 18px
+						bottom 18px
 </style>

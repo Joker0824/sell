@@ -16,7 +16,7 @@
 				<li class="goods-item" v-for="good in goods" :key="good.name" ref="goodsItemHook">
 					<h1 class="good-name">{{good.name}}</h1>
 					<ul>
-						<li class="food-item" v-for="food in good.foods" :key="food.name">
+						<li @click="selectFood(food,$event)" class="food-item" v-for="food in good.foods" :key="food.name">
 							<div class="icon-wrapper">
 								<img width="57" height="57" :src="food.icon" class="icon" alt="食物的icon">
 							</div>
@@ -39,8 +39,13 @@
 			</ul>
 		</div>
 		<!-- 右侧食物列表 -->
+		<!-- food详情页 -->
+		<transition name="fade">
+			<food :selectedFood="selectedFood" :food="selectedFood" ref="foodHook"></food>
+		</transition>
+		<!-- food详情页 -->
 		<!-- 购物车组件 -->
-		<shopcart :selectFoods="selectFoods"></shopcart>
+		<!-- <shopcart :selectFoods="selectFoods"></shopcart> -->
 		<!-- 购物车组件 -->
 	</div>
 </template>
@@ -49,6 +54,7 @@
 import BScroll from 'better-scroll';
 import Shopcart from 'components/shopcart/shopcart';
 import CartControl from 'components/cartcontrol/cartcontrol';
+import Food from 'components/food/food';
 const ERR_OK = 0;
 export default {
 	data() {
@@ -58,7 +64,8 @@ export default {
 			// food对应的每种套餐的高度
 			goodsHeightList: [],
 			//  food的滚动高度
-			scrollY: 0
+			scrollY: 0,
+			selectedFood: {}
 		};
 	},
 	computed: {
@@ -121,6 +128,10 @@ export default {
 			let el = goodsItems[index];
 			// better-scroll的api,跳转到对应的套餐、
 			this.goodsScroll.scrollToElement(el, 300);
+		},
+		selectFood(food, event) {
+			this.selectedFood = food;
+			this.$refs.foodHook.showFlag();
 		}
 	},
 	created() {
@@ -144,7 +155,8 @@ export default {
 	components: {
 		/* 引入shopcart组件 */
 		Shopcart,
-		CartControl
+		CartControl,
+		Food
 	}
 };
 </script>
@@ -152,7 +164,7 @@ export default {
 @import '../../common/stylus/mixin.styl';
 .goods
   position absolute
-  z-index -1
+  z-index 2
   display flex
   top 176px
   bottom 64px
@@ -249,4 +261,7 @@ export default {
 						position absolute
 						right 18px
 						bottom 18px
+	.shopcart
+		position relative
+		z-index 30
 </style>

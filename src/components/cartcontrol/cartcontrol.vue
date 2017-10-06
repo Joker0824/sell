@@ -2,14 +2,14 @@
 	<div class="cartcontrol">
 		<div class="cartcontrol-wrapper">
 			<transition name="move">
-				<div class="decrease" @click="decreaseFood" v-if="food.count>0">
+				<div class="decrease" @click.stop="decreaseFood" v-if="food.count>0">
 					<i class="icon-remove_circle_outline"></i>
 				</div>
 			</transition>
 			<transition name="move">
 				<div class="foodCount" v-if="food.count>0">{{food.count}}</div>
 			</transition>
-			<div class="addFood" @click="addFood">
+			<div class="addFood" @click.stop="addFood">
 				<i class="icon-add_circle "></i>
 			</div>
 		</div>

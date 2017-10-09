@@ -45,7 +45,7 @@
 		</transition>
 		<!-- food详情页 -->
 		<!-- 购物车组件 -->
-		<!-- <shopcart :selectFoods="selectFoods"></shopcart> -->
+		<shopcart :selectFoods="selectFoods"></shopcart>
 		<!-- 购物车组件 -->
 	</div>
 </template>

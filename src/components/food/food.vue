@@ -2,7 +2,7 @@
 	<div class="food" v-if="foodShow" ref="bs">
 		<div class="food-content">
 			<div class="img-header">
-				<img src="./imgs/seller_avatar_256px.jpg" alt="">
+				<img :src="food.image" alt="">
 				<i @click="foodShow=false" class="icon-arrow_lift"></i>
 			</div>
 			<div class="content">
@@ -118,6 +118,7 @@ export default {
 					left 0
 					top 0
 					width 100%
+					height 100%
 				.icon-arrow_lift
 					position absolute
 					top 0

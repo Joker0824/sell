@@ -14,3 +14,7 @@ resource/
 *.njsproj
 *.sln
 
+typings/globals/moment/typings.json
+typings/index.d.ts
+typings/index.d.ts
+typings/globals/moment/index.d.ts

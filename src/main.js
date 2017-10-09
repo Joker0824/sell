@@ -5,7 +5,9 @@ import App from './App';
 import router from './router';
 // 引入axios组件
 import axios from 'axios';
+import moment from 'moment';
 Vue.prototype.axios = axios;
+Vue.prototype.moment = moment;
 // 全局引用css
 import '@/common/stylus/index.styl';
 Vue.config.productionTip = false;

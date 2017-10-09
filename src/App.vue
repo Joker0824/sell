@@ -16,7 +16,7 @@
       </div>
     </div>
     <!-- 导航栏 -->
-    <router-view></router-view>
+    <router-view :seller="sellers"></router-view>
   </div>
 </template>
 <script>
@@ -48,7 +48,7 @@ export default {
 };
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
-@import './common/stylus/mixin.styl'; 
+@import './common/stylus/mixin.styl';
   #app
    .tab
     display flex
@@ -56,7 +56,7 @@ export default {
     line-height 40px
     width 100%
     border-1px(rgba(7,17,27,.1))
-    background-color rgb(255,255,255)  
+    background-color rgb(255,255,255)
     .tab-item
      flex 1
      text-align center

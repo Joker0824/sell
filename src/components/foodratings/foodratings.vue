@@ -1,9 +1,9 @@
 <template>
 	<div class="food-ratings">
 		<div class="ratings-type">
-			<span @click="selType('all')" :class="{'active':selectedType===0}" class="all">{{desc.all}}</span>
-			<span @click="selType('positive')" :class="{'active':selectedType===1}" class="positive">{{desc.positive}}</span>
-			<span @click="selType('negative')" :class="{'active':selectedType===2}" class="negative">{{desc.negative}}</span>
+			<span @click="selType('all')" :class="{'active':selectedType===0}" class="all">{{desc.all}}{{ratings.length}}</span>
+			<span @click="selType('positive')" :class="{'active':selectedType===1}" class="positive">{{desc.positive}}{{count.posCount}}</span>
+			<span @click="selType('negative')" :class="{'active':selectedType===2}" class="negative">{{desc.negative}}{{count.negCount}}</span>
 		</div>
 		<div class="onlyContent">
 			<i @click="onlyContent" :class="{'active':selOnlyContent}" class="icon-check_circle"></i>
@@ -14,7 +14,7 @@
 				<li class="rating" v-for="rating in selectTypeRatings" :key="rating.username">
 					<div class="rating-header clearfix">
 						<div class="fl">
-							<span class="rateTime">{{new Date(rating.rateTime)}}
+							<span class="rateTime">{{moment(rating.rateTime).format('l')}}
 							</span>
 						</div>
 						<div class="fr">
@@ -49,17 +49,24 @@ export default {
 			default() {
 				return [];
 			}
-		},
-		selectedType: {
-			type: Number,
-			default: 0
 		}
 	},
 	computed: {
-
-	},
-	created() {
-		this.selType('all');
+		//    计算各种评价的人数
+		count() {
+			let count = {
+				negCount: 0,
+				posCount: 0
+			};
+			this.ratings.forEach(function(rating) {
+				if (rating.rateType === 1) {
+					count.negCount++;
+				} else if (rating.rateType === 0) {
+					count.posCount++;
+				}
+			}, this);
+			return count;
+		}
 	},
 	data() {
 		return {
@@ -67,7 +74,8 @@ export default {
 			all: '全部',
 			negative: '吐槽',
 			selectTypeRatings: [],
-			selOnlyContent: false
+			selOnlyContent: false,
+			selectedType: 0
 		};
 	},
 	methods: {

@@ -122,7 +122,7 @@ export default {
      display inline-block
      vertical-align top
      padding 24px 16px 18px 24px
-     img 
+     img
        border-radius 4px
     .content-main
      display inline-block
@@ -153,18 +153,18 @@ export default {
        .support-icon
          display inline-block
          width 12px
-         height 12px   
+         height 12px
          margin-right 4px
          background-size 12px 12px
-         &.decrease 
+         &.decrease
            bg-img('./imgs/decrease_1')
-         &.discount 
+         &.discount
            bg-img('./imgs/discount_1')
-         &.guarantee 
+         &.guarantee
            bg-img('./imgs/guarantee_1')
-         &.invoice 
+         &.invoice
            bg-img('./imgs/invoice_1')
-         &.special 
+         &.special
            bg-img('./imgs/special_1')
        .support-text
          font-size 10px
@@ -189,7 +189,7 @@ export default {
     line-height 28px
     padding 0 22px 0 12px
     white-space nowrap
-    overflow hidden 
+    overflow hidden
     text-overflow ellipsis
     color rgba(255,255,255,1)
     background-color rgba(7,17,27,.2)
@@ -242,7 +242,7 @@ export default {
           color rgb(255,255,255)
         .star
           padding 16px 0 28px 0
-          height 24px   
+          height 24px
           line-height 24px
         .discount-detail
           width 80%
@@ -253,7 +253,7 @@ export default {
               position relative
               top -6px
               flex 1
-              border-bottom 1px solid rgba(255,255,255,0.2)  
+              border-bottom 1px solid rgba(255,255,255,0.2)
             .text
               font-size 14px
               padding 0 12px
@@ -288,9 +288,9 @@ export default {
                 font-weight 200
           .seller-bulletin
             padding 24px 12px 0 12px
-            line-height 24px 
+            line-height 24px
             font-size 12px
-            font-weight 200px      
+            font-weight 200px
    .mask-close
       position relative
       height 32px
@@ -300,7 +300,7 @@ export default {
         position absolute
         left 50%
         transform translateX(-50%)
-        display inline-block  
+        display inline-block
         width 32px
         height 32px
         font-size 32px

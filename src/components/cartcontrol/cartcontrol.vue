@@ -38,13 +38,11 @@ export default {
 				// 动态添加的属性
 				this.$set(this.food, 'count', 1);
 			} else {
-				// console.log(this.food);
 				this.food.count++;
 			}
 		},
 		decreaseFood() {
 			this.food.count--;
-			// console.log('decreaseCompeleted');
 		}
 	}
 };

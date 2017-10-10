@@ -6,28 +6,8 @@
 			<span @click="selType('negative')" :class="{'active':selectedType===2}" class="negative">{{desc.negative}}{{count.negCount}}</span>
 		</div>
 		<div class="onlyContent">
-			<i @click="onlyContent" :class="{'active':selOnlyContent}" class="icon-check_circle"></i>
+			<i @click="toggleContent" :class="{'active':onlyContent}" class="icon-check_circle"></i>
 			<span>只看有内容的评价</span>
-		</div>
-		<div class="ratings-list">
-			<ul>
-				<li class="rating" v-for="rating in selectTypeRatings" :key="rating.username">
-					<div class="rating-header clearfix">
-						<div class="fl">
-							<span class="rateTime">{{moment(rating.rateTime).format('l')}}
-							</span>
-						</div>
-						<div class="fr">
-							<span class="username">{{rating.username}}</span>
-							<img :src="rating.avatar" width="24" height="24" alt="">
-						</div>
-					</div>
-					<div class="rating-text">
-						<i class="type" :class="{'icon-thumb_down':rating.rateType===1,'icon-thumb_up':rating.rateType===0}"></i>
-						<span class="text">{{rating.text}}</span>
-					</div>
-				</li>
-			</ul>
 		</div>
 	</div>
 </template>
@@ -49,6 +29,10 @@ export default {
 			default() {
 				return [];
 			}
+		},
+		onlyContent: {
+			type: Boolean,
+			default: false
 		}
 	},
 	computed: {
@@ -73,8 +57,6 @@ export default {
 			positive: '推荐',
 			all: '全部',
 			negative: '吐槽',
-			selectTypeRatings: [],
-			selOnlyContent: false,
 			selectedType: 0
 		};
 	},
@@ -100,20 +82,18 @@ export default {
 					}
 				}, this);
 			}
-			this.selOnlyContent = false;
-		},
-		onlyContent() {
-			let arr = [];
-			if (!this.selectTypeRatings) {
-				return;
+			if (type === 'all') {
+				type = 2;
+			} else if (type === 'positive') {
+				type = 0;
+			} else {
+				type = 1;
 			}
-			this.selectTypeRatings.forEach(function(rating) {
-				if (rating.text) {
-					arr.push(rating);
-				}
-			}, this);
-			this.selectTypeRatings = arr;
-			this.selOnlyContent = !this.selOnlyContent;
+			this.$emit('select', type, this.selectTypeRatings);
+		},
+		toggleContent() {
+			// 通知父组件执行方法
+			this.$emit('toggle');
 		}
 	}
 };
@@ -162,19 +142,4 @@ export default {
 			span
 				font-size 12px
 				vertical-align top
-		.ratings-list
-			padding 12px 18px
-	  	.rating
-				padding 16px 18px
-				border-top 1px solid rgba(7,17,27,0.1)
-				.rating-header
-					padding 0 18px
-					.fl
-						float left
-					.fr
-						float right
-				.rating-text
-					padding 6px 0 16px 4px
-					.icon-thumb_up
-						color rgba(0,160,220,1)
   </style>

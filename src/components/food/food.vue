@@ -34,7 +34,28 @@
 			<split v-if="food.ratings"></split>
 			<div class="food-ratings-wrapper">
 				<h2>商品评价</h2>
-				<food-ratings :desc="desc" :ratings="food.ratings" ref="foodRate"></food-ratings>
+				<food-ratings :desc="desc" @toggle="toggleContent" @select="selectRating" :ratings="food.ratings" :onlyContent="onlyContent"></food-ratings>
+				<div class="ratings-list">
+					<ul>
+						<li class="rating" v-if="needShow(rating.rateType,rating.text)" v-for="rating in food.ratings" :key="rating.username">
+							<div class="rating-header clearfix">
+								<div class="fl">
+									<span class="rateTime">{{moment(rating.rateTime).format('l')}}
+									</span>
+								</div>
+								<div class="fr">
+									<span class="username">{{rating.username}}</span>
+									<img :src="rating.avatar" width="24" height="24" alt="">
+								</div>
+							</div>
+							<div class="rating-text">
+								<i class="type" :class="{'icon-thumb_down':rating.rateType===1,'icon-thumb_up':rating.rateType===0}"></i>
+								<span class="text">{{rating.text}}</span>
+							</div>
+						</li>
+					</ul>
+				</div>
+
 			</div>
 		</div>
 	</div>
@@ -45,6 +66,7 @@ import BScroll from 'better-scroll';
 import cartcontrol from 'components/cartcontrol/cartcontrol';
 import split from 'components/split/split';
 import FoodRatings from 'components/foodratings/foodratings';
+const ALL = 2;
 export default {
 	data() {
 		return {
@@ -53,8 +75,13 @@ export default {
 				negative: '吐槽',
 				positive: '推荐',
 				all: '全部'
-			}
+			},
+			selectType: ALL,
+			selectTypeRatings: [],
+			onlyContent: false
 		};
+	},
+	computed: {
 	},
 	props: {
 		food: {
@@ -73,11 +100,7 @@ export default {
 		showFlag() {
 			this.foodShow = true;
 			this.$nextTick(() => {
-				if (!this.scroll) {
-					this._initBS();
-				} else {
-					this.scroll.refresh();
-				}
+				this._initBS();
 			});
 		},
 		// 绑定betterscroll
@@ -91,6 +114,29 @@ export default {
 				Vue.set(this.food, 'count', 1);
 			} else {
 				this.food.count++;
+			}
+		},
+		selectRating(type) {
+			this.selectType = type;
+			console.log('selectType===' + this.selectType);
+			this.$nextTick(() => {
+				this._initBS();
+			});
+		},
+		toggleContent() {
+			this.onlyContent = !this.onlyContent;
+			this.$nextTick(() => {
+				this.scroll.refresh();
+			});
+		},
+		needShow(type, text) {
+			if (this.onlyContent && !text) {
+				return false;
+			}
+			if (this.selectType === ALL) {
+				return true;
+			} else {
+				return type === this.selectType;
 			}
 		}
 	}
@@ -182,4 +228,20 @@ export default {
 			.food-ratings-wrapper
 				h2
 					padding 18px 18px 6px 18px
+				.ratings-list
+					padding 12px 18px
+					.rating
+						padding 16px 18px
+						border-top 1px solid rgba(7,17,27,0.1)
+						.rating-header
+							padding 0 18px
+							.fl
+								float left
+							.fr
+								float right
+						.rating-text
+							padding 6px 0 16px 4px
+							.icon-thumb_up
+								color rgba(0,160,220,1)
+
 </style>

@@ -71,6 +71,7 @@ export default {
 			this.selectFoods.forEach(function(food) {
 				totalPrice += food.price * food.count;
 			}, this);
+			console.log(totalPrice);
 			return totalPrice;
 		},
 		// 计算总数
@@ -79,6 +80,7 @@ export default {
 			this.selectFoods.forEach(function(food) {
 				totalCount += food.count;
 			});
+			console.log(totalCount);
 			return totalCount;
 		},
 		// 计算付款时的文本

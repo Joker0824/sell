@@ -16,7 +16,7 @@
       </div>
     </div>
     <!-- 导航栏 -->
-    <router-view :seller="sellers"></router-view>
+    <router-view :sellers="sellers"></router-view>
   </div>
 </template>
 <script>

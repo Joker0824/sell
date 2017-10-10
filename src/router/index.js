@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 // import VHeader from 'components/header/header.vue';
-import Sellers from 'components/sellers/sellers.vue';
+import Sellers from 'components/seller/seller.vue';
 import Goods from 'components/goods/goods.vue';
 import Ratings from 'components/ratings/ratings.vue';
 // 注释

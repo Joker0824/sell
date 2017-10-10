@@ -259,4 +259,4 @@ export default {
 							position absolute
 							right 6px
 							bottom 12px
-	</style>
+</style>

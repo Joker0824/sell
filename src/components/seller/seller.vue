@@ -18,24 +18,36 @@
 			<!-- 公告和活动 -->
 			<div class="bulletin">
 				<h2 class="title">公告与活动</h2>
-        <div class="text">
-         {{sellers.bulletin}}
-				</div>
+      	     	<div class="text">{{sellers.bulletin}}</div>
 				<div class="supports">
 					<ul>
 						<li class="support" v-for="(support,index) in sellers.supports" :key="support.type">
-              <i class="icon" :class="classMap[support.type]"></i>
+             				 <i class="icon" :class="classMap[support.type]"></i>
 							<span class="text">{{sellers.supports[index].description}}</span>
 						</li>
 					</ul>
 				</div>
 			</div>
 			<!-- 公告和活动 -->
+			<split></split>
 			<!-- 商家实景 -->
-			<div class="picture"></div>
+			<div class="pics">
+        <h2>商家实景</h2>
+			  <div class="img-wrapper" ref="bsHook">
+					<div class="content" ref="contentHook">
+					<img v-for="pic in sellers.pics" width="120" height="90	" :key="pic" :src="pic" alt="">
+					</div>
+			  </div>
+			</div>
 			<!-- 商家实景 -->
+			<split></split>
 			<!-- 商家信息 -->
-			<div class="info"></div>
+			<div class="infos">
+				<h2>商家信息</h2>
+         <ul>
+					 <li class="info" v-for="info in sellers.infos" :key="info">{{info}}</li>
+				 </ul>
+			</div>
 			<!-- 商家信息 -->
 		</div>
 	</div>
@@ -44,18 +56,12 @@
 import star from 'components/star/star';
 import split from 'components/split/split';
 import BScroll from 'better-scroll';
+const ERR_OK = 0;
 export default {
-	props: {
-		sellers: {
-			type: Object,
-			default() {
-				return {};
-			}
-		}
-	},
 	data() {
 		return {
-			classMap: ['decrease', 'discount', 'guarantee', 'invoice', 'special']
+			classMap: ['decrease', 'discount', 'guarantee', 'invoice', 'special'],
+			sellers: { }
 		};
 	},
 	methods: {
@@ -67,23 +73,46 @@ export default {
 			} else {
 				this.scroll.refresh();
 			}
-	}
-
 	},
-    watch: {
-      sellers() {
-				console.log(this.sellers);
-        this.$nextTick(() => {
-          this._initBS();
-        });
-      }
-    },
-    mounted() {
-      this.$nextTick(() => {
-        this._initBS();
-      });
-    },
-		components: {
+	_initBSX() {
+				if (!this.scrollX) {
+				this.scrollX = new BScroll(this.$refs.bsHook, {
+					click: true,
+					scrollX: true
+				});
+			} else {
+				this.scrollX.refresh();
+			}
+	}
+	},
+	created() {
+		this.axios.get('api/sellers')
+			.then((res) => {
+				console.log(res.data);
+				if (res.data.errno === ERR_OK) {
+					this.sellers = res.data.data;
+					this.$nextTick(() => {
+						this._initBS();
+						this._initBSX();
+						if (this.sellers.pics) {
+							let picWidth = 120;
+							let margin = 6;
+							let width = (picWidth + margin) * this.sellers.pics.length;
+							this.$refs.contentHook.style.width = width + 'px';
+							console.log(this.$refs.contentHook.style.width);
+							console.log(width);
+							this.$nextTick(() => {
+								this.scrollX.refresh();
+							});
+							}
+					});
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	},
+	components: {
 			star,
 			split
 		}
@@ -95,6 +124,7 @@ export default {
 	position absolute
 	left 0
 	top 176px
+	bottom 0
 	width 100%
 	overflow hidden
 	.sellers-content
@@ -174,5 +204,33 @@ export default {
 						line-height 16px
 						font-weight 200
 						color rgb(7,17,27)
+		.pics
+			padding 18px 0 18px 18px
+			h2
+				font-size 14px
+				line-height 14px
+				color rgb(7,17,27)
+				padding-bottom 12px
+			.img-wrapper
+				width 100%
+				overflow hidden
+			  .content
+				img
+					margin-right 6px
+		.infos
+			padding 18px
+			h2
+				font-size 14px
+				line-height 14px
+				color rgb(7,17,27)
+				padding-bottom 12px
+			ul
+				li
+					border-top 1px solid rgba(147,153,159,0.3)
+					padding 16px 12px
+					font-size 12px
+					line-height 16px
+					font-weight 200
+					color rgb(7,17,27)
 </style>
 

@@ -167,7 +167,7 @@ export default {
   z-index 2
   display flex
   top 176px
-  bottom 64px
+  bottom 48px
   width 100%
   overflow hidden
   .menu-wrapper
